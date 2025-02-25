@@ -1,0 +1,41 @@
+# https://starship.rs/config/
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+# $username\
+$hostname\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$package\
+$conda\
+$env_var\
+$custom\
+$sudo\
+$jobs\
+$cmd_duration\
+$time\
+$status\
+$line_break\
+$container\
+$character"""
+
+[status]
+disabled = false
+
+[time]
+disabled = false
+format = '[\[$time\]]($style) '
+
+[sudo]
+disabled = false
+
+[directory]
+truncation_length = 5
+truncation_symbol = '…/'
+
+[username]
+show_always = true
