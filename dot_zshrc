@@ -23,8 +23,6 @@ zinit light starship/starship
 
 # plugin / snippet
 zinit snippet OMZL::key-bindings.zsh    # must load before fzf
-zinit ice wait"1" lucid
-zinit snippet OMZP::sudo    # double esc for sudo
 
 zinit wait lucid for \
         light-mode \
@@ -51,6 +49,16 @@ zinit wait lucid for \
     zsh-users/zsh-autosuggestions \
         blockf atload"zicompinit; zicdreplay" \
     zsh-users/zsh-completions
+
+# programs
+zinit wait lucid for \
+    OMZP::sudo \
+        from'gh-r' as'program' \
+        atload'source <(fzf --zsh)' \
+    junegunn/fzf \
+        from'gh-r' as'program' \
+        atload'lfcd() { cd "$(command lf -print-last-dir "$@")" }; bindkey -s "^o" "lfcd\n"' \
+    gokcehan/lf
 
 ########################## ZSH Basic Options ##########################
 setopt autocd              # change directory just by typing its name
@@ -106,11 +114,6 @@ alias la='ls -ahl --group-directories-first'
 alias tma='tmux a || tmux'
 alias curl_header='curl -o /dev/null -sS -D - '
 
-# plugins
-source <(fzf --zsh) # 加载 fzf 的快捷键和补全, 支持 kill/文件目录 等等补全
-
-LFCD="/etc/lf/lfcd.sh"
-[ -f "$LFCD" ] && source "$LFCD" && bindkey -s '^o' 'lfcd\n'
-
 ########################## Other Stuff ##########################
 [ -f "$HOME/.localrc" ] && source "$HOME/.localrc"
+
