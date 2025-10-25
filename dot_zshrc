@@ -77,11 +77,14 @@ autoload -U select-word-style && select-word-style b
 HISTSIZE=10000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
-HISTDUP=erase
-setopt extended_history     # history file with timestamp 
+
+# https://man.archlinux.org/man/zshoptions.1.en
+setopt extended_history     # history file with timestamp
 setopt appendhistory
-setopt sharehistory
-setopt hist_ignore_space
+setopt inc_append_history
+unsetopt sharehistory inc_append_history_time
+
+setopt hist_ignore_space    # ignore the first character on the line is a space
 setopt hist_ignore_all_dups
 setopt hist_save_no_dups
 setopt hist_ignore_dups
@@ -113,6 +116,12 @@ alias ll='ls -hl --group-directories-first'
 alias la='ls -ahl --group-directories-first'
 alias tma='tmux a || tmux'
 alias curl_header='curl -o /dev/null -sS -D - '
+alias code='${CODE_PATH:-/mnt/d/soft/VSCode/bin/code}'
+
+function cursor() {
+  local _cursor_path="${CURSOR_PATH:-/mnt/d/soft/cursor/Cursor.exe}"
+  "$_cursor_path" --remote wsl+Arch "$(realpath ${1:-.})"
+}
 
 ########################## Other Stuff ##########################
 [ -f "$HOME/.localrc" ] && source "$HOME/.localrc"

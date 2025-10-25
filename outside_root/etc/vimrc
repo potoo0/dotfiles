@@ -1,0 +1,46 @@
+" 设置相关: 查看设置的值: `:set opt?`, 示例: `:set mouse?`; 
+" 使用 `vim --version` 可查看配置文件路径, `:scriptname` 可查看加载的脚本
+set nocompatible
+
+" indentation option
+set expandtab
+set tabstop=4      " width
+set shiftwidth=4   " same to tabstop
+set softtabstop=-1 " use value of shiftwidth
+set smarttab       " always use shiftwidth
+
+" 禁用 q 的 record, 因为其容易被 ZQ 误触发
+noremap q <Nop>
+
+" Vb 命令进入 visual block, 因为 windows 下终端工具 C-v 默认是粘贴
+command! Vb normal! <C-v>
+
+" search
+set hlsearch      " 高亮搜索
+set incsearch     " 增量搜索, 而不是 enter 才搜索
+
+" 括号匹配
+set showmatch     " 输入右括号时跳转显示左括号, 屏幕之外的话则不会
+set matchtime=1   " showmatch 效果时间, 从默认的 500ms 改为 1/10s
+
+" mouse
+if has('mouse')
+  set mouse=a
+endif
+
+" status line, doc: `https://vimdoc.sourceforge.net/htmldoc/options.html#'statusline'`
+set noruler           " statusline 中已经显示了位置, 不需要 ruler
+set laststatus=2      " 总是显示状态行
+set statusline=       " reset statusline
+set statusline+=\ %f  " 文件地址
+set statusline+=%m    " Modified flag
+set statusline+=%r    " Readonly flag
+set statusline+=%=    " right aligned
+set statusline+=%y    " file type
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+set statusline+=\[%{&fileformat}\]
+set statusline+=\ %p%%\ %l:%v " 位置: 行号占总数百分比 行号:列号
+" status line color
+hi statusline ctermfg=8 ctermbg=15
+
+" --------------- end ---------------
