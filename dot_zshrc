@@ -118,9 +118,10 @@ alias tma='tmux a || tmux'
 alias curl_header='curl -o /dev/null -sS -D - '
 alias code='${CODE_PATH:-/mnt/d/soft/VSCode/bin/code}'
 
-function cursor() {
-  local _cursor_path="${CURSOR_PATH:-/mnt/d/soft/cursor/Cursor.exe}"
-  "$_cursor_path" --remote wsl+Arch "$(realpath ${1:-.})"
+# open with Antigravity, same configuration as vscode/cursor
+function ag() {
+  local _ag_path="${AG_PATH:-/mnt/d/soft/Antigravity/Antigravity.exe}"
+  "$_ag_path" --remote "wsl+$WSL_DISTRO_NAME" "$(realpath ${1:-.})"
 }
 
 ########################## Other Stuff ##########################
