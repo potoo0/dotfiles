@@ -21,6 +21,7 @@ chezmoi git -- commit -m "Update dotfiles"
 chezmoi git push
 
 # 与 outside_root 的之间的同步 (outside_root 是指以根目录起始的), 不支持删除
+chezmoi cd
 # 同步所有到 /
 sudo rsync -avh outside_root/ / --dry-run
 # 同步某个文件到 outside_root
