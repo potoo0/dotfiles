@@ -118,10 +118,21 @@ alias tma='tmux a || tmux'
 alias curl_header='curl -o /dev/null -sS -D - '
 alias code='${CODE_PATH:-/mnt/d/soft/VSCode/bin/code}'
 
-# open with Antigravity, same configuration as vscode/cursor
+# Open files or directories with Antigravity, same configuration as vscode/cursor
+# Uses WSL remote connection to open the path in Antigravity (Windows)
+# Usage: ag [path]
+# Example: ag .         - Open current directory
+#          ag prj/test  - Open specific directory
 function ag() {
   local _ag_path="${AG_PATH:-/mnt/d/soft/Antigravity/Antigravity.exe}"
   "$_ag_path" --remote "wsl+$WSL_DISTRO_NAME" "$(realpath ${1:-.})"
+}
+
+# Create a new directory and change into it
+# Usage: mkcd <directory_name>
+# Example: mkcd /tmp/prj/test
+function mkcd() {
+    mkdir -p -- "$@" && cd -- "$1"
 }
 
 ########################## Other Stuff ##########################
