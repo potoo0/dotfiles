@@ -1,0 +1,14 @@
+[user]
+    name = potoo0
+    email = wqaz1413@gmail.com
+[core]
+    excludesfile = ~/.config/git/gitignore
+    quotepath = false
+[init]
+    defaultBranch = main
+[push]
+    autoSetupRemote = true
+[pull]
+    rebase = true
+[alias]
+    lg = log --graph --abbrev-commit --decorate --date=short --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'

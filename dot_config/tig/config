@@ -1,0 +1,25 @@
+set truncation-delimiter = utf-8
+set line-graphics = utf-8
+
+# mouse
+set mouse = yes
+set mouse-scroll = 1
+set mouse-wheel-cursor = yes
+
+# id
+set main-view-id-display = yes
+
+# date format
+set refs-view-date-display = custom
+set main-view-date-display = custom
+set stash-view-date-display = custom
+
+# colorscheme
+source ~/.config/tig/colorscheme.tigrc
+
+# keybindings
+bind main T !git tag "%(prompt Enter new tag name: )" %(commit)
+bind main B ?git checkout -b "%(prompt Checkout - Enter new branch name: )"
+bind main u !git pull --rebase
+
+bind refs M ?git branch -m "%(refname)" "%(prompt Rename - Enter new branch name: )"

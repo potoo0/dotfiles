@@ -1,0 +1,9 @@
+# vim: set expandtab sw=4 tabstop=4:
+# *color* 'area' 'fgcolor' 'bgcolor' '[attributes]'
+
+color date          green   default
+color author        magenta default
+color cursor	    white	101     bold
+color cursor-blur   white   240
+color title-blur    white   240    
+color title-focus   white   240     bold
