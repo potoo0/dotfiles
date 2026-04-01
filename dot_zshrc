@@ -25,40 +25,40 @@ zinit light starship/starship
 zinit snippet OMZL::key-bindings.zsh    # must load before fzf
 
 zinit wait lucid for \
-        light-mode \
-        atclone'dircolors -b LS_COLORS > clrs.zsh' \
-        atpull'%atclone' pick'clrs.zsh' nocompile'!' \
-        atload'zstyle ":completion:*" list-colors "${(s.:.)LS_COLORS}"' \
-    trapd00r/LS_COLORS \
-        atinit'
-            # 双向匹配, 可以快速 cd / ls...
-            zstyle ":completion:*" matcher-list "m:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}" "r:|=*" "l:|=* r:|=*"
-            zstyle ":completion:*:git-checkout:*" sort false
-            zstyle ":completion:*:descriptions" format "[%d]"
-            zstyle ":completion:*" menu no
-            zstyle ":completion:*" use-cache yes
-            zstyle ":completion:*" cache-path $ZSH_CACHE_DIR
-            # Aloxaf/fzf-tab 必须在 fzf 加载之后, 否则 tab 将无任何效果
-            zstyle ":fzf-tab:complete:cd:*" fzf-preview '\''ls --color $realpath'\''
-        ' \
-    Aloxaf/fzf-tab \
-        atinit"zicompinit; zicdreplay" \
-    zdharma-continuum/fast-syntax-highlighting \
-        atinit='ZSH_AUTOSUGGEST_MANUAL_REBIND=1' \
-        atload"!_zsh_autosuggest_start; bindkey '^f' autosuggest-accept" \
-    zsh-users/zsh-autosuggestions \
-        blockf atload"zicompinit; zicdreplay" \
-    zsh-users/zsh-completions
+    light-mode \
+    atclone'dircolors -b LS_COLORS > clrs.zsh' \
+    atpull'%atclone' pick'clrs.zsh' nocompile'!' \
+    atload'zstyle ":completion:*" list-colors "${(s.:.)LS_COLORS}"' \
+        trapd00r/LS_COLORS \
+    atinit'
+        # 双向匹配, 可以快速 cd / ls...
+        zstyle ":completion:*" matcher-list "m:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}" "r:|=*" "l:|=* r:|=*"
+        zstyle ":completion:*:git-checkout:*" sort false
+        zstyle ":completion:*:descriptions" format "[%d]"
+        zstyle ":completion:*" menu no
+        zstyle ":completion:*" use-cache yes
+        zstyle ":completion:*" cache-path $ZSH_CACHE_DIR
+        # Aloxaf/fzf-tab 必须在 fzf 加载之后, 否则 tab 将无任何效果
+        zstyle ":fzf-tab:complete:cd:*" fzf-preview '\''ls --color $realpath'\''
+    ' \
+        Aloxaf/fzf-tab \
+    atinit"zicompinit; zicdreplay" \
+        zdharma-continuum/fast-syntax-highlighting \
+    blockf \
+        zsh-users/zsh-completions \
+    atinit='ZSH_AUTOSUGGEST_MANUAL_REBIND=1' \
+    atload"!_zsh_autosuggest_start; bindkey '^f' autosuggest-accept" \
+        zsh-users/zsh-autosuggestions
 
 # programs
 zinit wait lucid for \
-    OMZP::sudo \
-        from'gh-r' as'program' \
-        atload'source <(fzf --zsh)' \
-    junegunn/fzf \
-        from'gh-r' as'program' \
-        atload'lfcd() { cd "$(command lf -print-last-dir "$@")" }; bindkey -s "^o" "lfcd\n"' \
-    gokcehan/lf
+        OMZP::sudo \
+    from'gh-r' as'program' \
+    atload'source <(fzf --zsh)' \
+        junegunn/fzf \
+    from'gh-r' as'program' \
+    atload'lfcd() { cd "$(command lf -print-last-dir "$@")" }; bindkey -s "^o" "lfcd\n"' \
+        gokcehan/lf
 
 ########################## ZSH Basic Options ##########################
 setopt autocd              # change directory just by typing its name
@@ -144,4 +144,3 @@ function mkcd() {
 
 ########################## Other Stuff ##########################
 [ -f "$HOME/.localrc" ] && source "$HOME/.localrc"
-
