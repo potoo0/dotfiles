@@ -116,16 +116,23 @@ alias ll='ls -hl --group-directories-first'
 alias la='ls -ahl --group-directories-first'
 alias tma='tmux a || tmux'
 alias curl_header='curl -o /dev/null -sS -D - '
-alias code='${CODE_PATH:-/mnt/d/soft/VSCode/bin/code}'
 
-# Open files or directories with Antigravity, same configuration as vscode/cursor
-# Uses WSL remote connection to open the path in Antigravity (Windows)
-# Usage: ag [path]
-# Example: ag .         - Open current directory
-#          ag prj/test  - Open specific directory
-function ag() {
-  local _ag_path="${AG_PATH:-/mnt/d/soft/Antigravity/Antigravity.exe}"
-  "$_ag_path" --remote "wsl+$WSL_DISTRO_NAME" "$(realpath ${1:-.})"
+# Template function for vscode-like editors (Antigravity, Code, Cursor, etc.)
+# Usage:
+#   - Create an alias, e.g.:
+#       alias ag='run_vscode_like "/mnt/d/soft/Antigravity/Antigravity.exe"'
+#   - Run with an optional path argument:
+#       ag .          # Open current directory
+#       ag prj/test   # Open specific directory
+function run_vscode_like() {
+  local _editor_path="$1"
+  # Check if editor executable exists
+  if [[ ! -f "$_editor_path" ]]; then
+    echo "Error: editor executable '$_editor_path' not found!" >&2
+    return 1
+  fi
+  nohup "$_editor_path" --remote "wsl+$WSL_DISTRO_NAME" "$(realpath ${2:-.})" >/dev/null 2>&1 &
+  disown
 }
 
 # Create a new directory and change into it
