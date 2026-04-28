@@ -4,6 +4,7 @@
 [core]
     excludesfile = ~/.config/git/gitignore
     quotepath = false
+    autocrlf = false
 [init]
     defaultBranch = main
 [push]
