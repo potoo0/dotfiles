@@ -22,6 +22,7 @@ zinit ice as"command" from"gh-r" \
 zinit light starship/starship
 
 # plugin / snippet
+zinit ice atload"bindkey '^[e' edit-command-line"
 zinit snippet OMZL::key-bindings.zsh    # must load before fzf
 
 zinit wait lucid for \
@@ -72,6 +73,8 @@ setopt promptsubst         # enable command substitution in prompt
 
 # b for bash. ref: https://github.com/zsh-users/zsh/blob/master/Functions/Zle/select-word-style
 autoload -U select-word-style && select-word-style b
+# treat '-' as part of a word so Ctrl-w deletes '--option' in one step
+zstyle ':zle:*' word-chars '-'
 
 ########################## History Configuration ##########################
 HISTSIZE=10000
