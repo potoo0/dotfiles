@@ -1,4 +1,9 @@
 .idea/
 *__gitignore__*
-.specstory/
 
+# AI-related tools
+.specstory/
+.codegraph/
+.codex
+.cursor/
+.claude/
