@@ -120,6 +120,22 @@ alias la='ls -ahl --group-directories-first'
 alias tma='tmux a || tmux'
 alias curl_header='curl -o /dev/null -sS -D - '
 
+# Keep WSL_INTEROP synced to a live interop socket for long-lived shells.
+function sync_wsl_interop() {
+    # tmux server may live for a long time and keep a stale WSL_INTEROP value.
+    # If current socket is still valid, keep it as-is.
+    if [ -n "${WSL_INTEROP-}" ] && [ -S "$WSL_INTEROP" ]; then
+        return 0
+    fi
+
+    # Otherwise sync to the newest available /run/WSL/*_interop socket.
+    local latest_interop
+    latest_interop="$(ls -1t /run/WSL/*_interop 2>/dev/null | head -n 1)"
+    if [ -n "$latest_interop" ] && [ -S "$latest_interop" ]; then
+        export WSL_INTEROP="$latest_interop"
+    fi
+}
+
 # Template function for vscode-like editors (Antigravity, Code, Cursor, etc.)
 # Usage:
 #   - Create an alias, e.g.:
@@ -128,14 +144,16 @@ alias curl_header='curl -o /dev/null -sS -D - '
 #       ag .          # Open current directory
 #       ag prj/test   # Open specific directory
 function run_vscode_like() {
-  local _editor_path="$1"
-  # Check if editor executable exists
-  if [[ ! -f "$_editor_path" ]]; then
-    echo "Error: editor executable '$_editor_path' not found!" >&2
-    return 1
-  fi
-  nohup "$_editor_path" --remote "wsl+$WSL_DISTRO_NAME" "$(realpath ${2:-.})" >/dev/null 2>&1 &
-  disown
+    local _editor_path="$1"
+    sync_wsl_interop
+
+    # Check if editor executable exists
+    if [[ ! -f "$_editor_path" ]]; then
+        echo "Error: editor executable '$_editor_path' not found!" >&2
+        return 1
+    fi
+    nohup "$_editor_path" --remote "wsl+$WSL_DISTRO_NAME" "$(realpath ${2:-.})" >/dev/null 2>&1 &
+    disown
 }
 
 # Create a new directory and change into it
