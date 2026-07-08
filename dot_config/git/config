@@ -16,3 +16,7 @@
     co = checkout
     cp = cherry-pick
     br = branch
+    aa = add --all --verbose
+    ss = status -sb -u
+    stl = stash list --format=format:'%C(yellow)%h%C(reset) - %C(cyan)%gd%C(reset) %C(green)%cr%C(reset) %s'
+    stm = "!f() { [ -z \"${1:-}\" ] && { echo \"Error: stash message required\" >&2; return 1; }; msg=\"$1\"; shift; git stash push -m \"$msg\" \"$@\"; }; f"
