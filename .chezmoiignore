@@ -2,3 +2,4 @@ README.md
 outside_root/
 **__gitignore__**
 .vscode/
+**/tmux.local.conf
