@@ -1,3 +1,6 @@
+# machine-local autoload functions and completions
+fpath=("$HOME/.zfunc" $fpath)
+
 # setup zinit
 # ZINIT_HOME="/usr/local/share/zinit/zinit.git"
 _ZINIT_ROOT="/usr/local/share/zinit"
@@ -191,5 +194,5 @@ function gccd() {
     cd -- "$_gccd_dir"
 }
 
-########################## Other Stuff ##########################
+########################## machine-local ##########################
 [ -f "$HOME/.localrc" ] && source "$HOME/.localrc"
