@@ -2,15 +2,25 @@
 " 使用 `vim --version` 可查看配置文件路径, `:scriptname` 可查看加载的脚本
 set nocompatible
 
+" Syntax and file types
+syntax enable
+filetype plugin indent on
+
 " indentation option
 set expandtab
 set tabstop=4      " width
 set shiftwidth=4   " same to tabstop
 set softtabstop=-1 " use value of shiftwidth
 set smarttab       " always use shiftwidth
+set backspace=indent,eol,start
+
+" 其他显示
+set hidden
+set showcmd
+set number
 
 " 禁用 q 的 record, 因为其容易被 ZQ 误触发
-noremap q <Nop>
+nnoremap q <Nop>
 
 " Vb 命令进入 visual block, 因为 windows 下终端工具 C-v 默认是粘贴
 command! Vb normal! <C-v>
@@ -18,6 +28,9 @@ command! Vb normal! <C-v>
 " search
 set hlsearch      " 高亮搜索
 set incsearch     " 增量搜索, 而不是 enter 才搜索
+set ignorecase    " 忽略大小写
+set smartcase     " 自动大小写, 如果有出现大写字母则严格大小写
+nnoremap <Esc><Esc> :nohlsearch<CR> " 清除搜索的高亮
 
 " 括号匹配
 set showmatch     " 输入右括号时跳转显示左括号, 屏幕之外的话则不会
