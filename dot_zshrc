@@ -42,6 +42,7 @@ zinit wait lucid for \
         zstyle ":completion:*" menu no
         zstyle ":completion:*" use-cache yes
         zstyle ":completion:*" cache-path $ZSH_CACHE_DIR
+        zstyle ":completion:*:scp:*" tag-order hosts files users
         # Aloxaf/fzf-tab 必须在 fzf 加载之后, 否则 tab 将无任何效果
         zstyle ":fzf-tab:complete:cd:*" fzf-preview '\''ls --color $realpath'\''
     ' \
@@ -52,7 +53,20 @@ zinit wait lucid for \
         zsh-users/zsh-completions \
     atinit='ZSH_AUTOSUGGEST_MANUAL_REBIND=1' \
     atload"!_zsh_autosuggest_start; bindkey '^f' autosuggest-accept" \
-        zsh-users/zsh-autosuggestions
+        zsh-users/zsh-autosuggestions \
+    atinit='ZSH_SSH_INCLUDE_KNOWN_HOSTS=1' \
+    atload'
+        # _ssh_host_list 存在时解析其作为 scp 的 hosts 补全项
+        if (( $+functions[_ssh_host_list] )); then
+            _scp_ssh_hosts() {
+                reply=("${(@f)$(_ssh_host_list)}")
+                reply=("${(@)reply%%|*}")
+            }
+
+            zstyle -e ":completion:*:scp:*:hosts" hosts "_scp_ssh_hosts"
+        fi
+    ' \
+        sunlei/zsh-ssh
 
 # programs
 zinit wait lucid for \
