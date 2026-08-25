@@ -28,24 +28,36 @@ zinit light starship/starship
 zinit ice atload"bindkey '^[e' edit-command-line"
 zinit snippet OMZL::key-bindings.zsh    # must load before fzf
 
+_configure_completion() {
+    # 双向匹配, 可以快速 cd / ls...
+    zstyle ":completion:*" matcher-list "m:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}" "r:|=*" "l:|=* r:|=*"
+    zstyle ":completion:*:git-checkout:*" sort false
+    zstyle ":completion:*:descriptions" format "[%d]"
+    zstyle ":completion:*" menu no
+    zstyle ":completion:*" use-cache yes
+    zstyle ":completion:*" cache-path $ZSH_CACHE_DIR
+    zstyle ":completion:*:scp:*" tag-order hosts files users
+
+    ################### Aloxaf/fzf-tab ###################
+    # Aloxaf/fzf-tab 与 fzf 加载顺序不严格要求
+    #     如果 fzf-tab 先加载 fzf 后加载, fzf 未覆盖的补全最终会回落到 fzf-tab 的补全
+    zstyle ':fzf-tab:complete:(cd|rm):*' fzf-preview 'ls -Alh --color=always -- "$realpath"'
+
+    # git 集成
+    zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview \
+        'git --no-pager diff --color=always -- "$realpath"'
+    zstyle ':fzf-tab:complete:git-log:*' fzf-preview \
+        'git --no-pager log -20 --color=always --date=iso-strict "$word"'
+    zstyle ':fzf-tab:complete:git-help:*' fzf-preview 'git help --man "$word"'
+}
+
 zinit wait lucid for \
     light-mode \
     atclone'dircolors -b LS_COLORS > clrs.zsh' \
     atpull'%atclone' pick'clrs.zsh' nocompile'!' \
     atload'zstyle ":completion:*" list-colors "${(s.:.)LS_COLORS}"' \
         trapd00r/LS_COLORS \
-    atinit'
-        # 双向匹配, 可以快速 cd / ls...
-        zstyle ":completion:*" matcher-list "m:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}" "r:|=*" "l:|=* r:|=*"
-        zstyle ":completion:*:git-checkout:*" sort false
-        zstyle ":completion:*:descriptions" format "[%d]"
-        zstyle ":completion:*" menu no
-        zstyle ":completion:*" use-cache yes
-        zstyle ":completion:*" cache-path $ZSH_CACHE_DIR
-        zstyle ":completion:*:scp:*" tag-order hosts files users
-        # Aloxaf/fzf-tab 必须在 fzf 加载之后, 否则 tab 将无任何效果
-        zstyle ":fzf-tab:complete:cd:*" fzf-preview '\''ls --color $realpath'\''
-    ' \
+    atinit'_configure_completion' \
         Aloxaf/fzf-tab \
     atinit"zicompinit; zicdreplay" \
         zdharma-continuum/fast-syntax-highlighting \
