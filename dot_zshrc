@@ -192,6 +192,16 @@ function mkcd() {
     mkdir -p -- "$@" && cd -- "$1"
 }
 
+# Create new files and any missing parent directories
+# Usage: touchp <file_path> [file_path ...]
+# Example: touchp .gitea/workflows/release.yaml tmp/a.txt tmp/b.txt
+touchp() {
+  local f
+  for f in "$@"; do
+    mkdir -p -- "$(dirname -- "$f")" && touch -- "$f"
+  done
+}
+
 # Clone a git repository and change into the cloned directory
 # Usage: gccd [git-clone-options] <repository> [directory]
 # Example: gccd --depth 1 https://github.com/user/repo.git
