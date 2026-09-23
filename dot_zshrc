@@ -91,6 +91,10 @@ zinit wait lucid for \
         gokcehan/lf
 
 ########################## ZSH Basic Options ##########################
+# Zsh online docs:
+# https://man.archlinux.org/man/zsh.1
+# https://man.archlinux.org/man/zshoptions.1.en
+# https://man.archlinux.org/man/zshparam.1
 setopt autocd              # change directory just by typing its name
 setopt correct             # auto correct mistakes
 setopt interactivecomments # allow comments in interactive mode
@@ -110,11 +114,10 @@ HISTSIZE=10000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
 
-# https://man.archlinux.org/man/zshoptions.1.en
 setopt extended_history     # history file with timestamp
-setopt appendhistory
+setopt append_history
 setopt inc_append_history
-unsetopt sharehistory inc_append_history_time
+unsetopt share_history inc_append_history_time
 
 setopt hist_ignore_space    # ignore the first character on the line is a space
 setopt hist_ignore_all_dups
@@ -122,9 +125,28 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
+########################## Directory Stack ##########################
+setopt auto_pushd           # make cd push the old directory onto the directory stack
+setopt pushd_ignore_dups    # do not push the same directory onto the stack
+setopt pushd_minus          # cd -1 refers to the previous directory (default -N counts from the bottom of the stack)
+DIRSTACKSIZE=10             # maximum stack size 10 = current directory + 9 most recent directories
+
+# global aliases for navigating up directories, eg: `ls ...`
+alias -g ...='../..'
+alias -g ....='../../..'
+
+# Show numbered dir stack (args pass through to dirs, eg: d -c)
+function d() {
+  if [[ -n $1 ]]; then
+    dirs "$@"
+  else
+    dirs -v | head -n 10
+  fi
+}
+
 ########################## Common ##########################
 # start ssh-agent or reuse
-run-ssh-agent() {
+function run-ssh-agent() {
     if ! pgrep -u "$USER" ssh-agent > /dev/null; then
         ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"
     fi
@@ -195,7 +217,7 @@ function mkcd() {
 # Create new files and any missing parent directories
 # Usage: touchp <file_path> [file_path ...]
 # Example: touchp .gitea/workflows/release.yaml tmp/a.txt tmp/b.txt
-touchp() {
+function touchp() {
   local f
   for f in "$@"; do
     mkdir -p -- "$(dirname -- "$f")" && touch -- "$f"

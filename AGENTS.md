@@ -16,12 +16,14 @@
 cut -c3- dot_config/tmux/tmux.conf | bash -s function_name
 ```
 
+- 内嵌 shell 函数定义采用风格: `func_name() { ... }`, 防止 dash 兼容问题(不支持 `function` 关键字)。
 - 修改内嵌 shell 函数后，运行 `cut -c3- dot_config/tmux/tmux.conf | bash -n`。
 - tmux target 优先使用稳定 id，例如 `#{window_id}`、`#{pane_id}`；展示给用户时再使用 `#{session_name}:#{window_index}` 等可读格式。
 
 ## zsh
 
 - `dot_zshrc` 依赖 zinit，验证时不要随意 source 整个文件，避免触发插件安装或改变当前 shell。
+- 函数定义采用风格: `function func_name() { ... }`, 防止已存在 alias 时函数定义异常。
 - 修改函数时优先静态检查或单独验证函数逻辑。
 - WSL 相关函数如 `sync_wsl_interop`、`run_vscode_like` 涉及 Windows 可执行文件路径，改动前确认调用场景。
 
