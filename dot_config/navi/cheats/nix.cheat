@@ -1,0 +1,10 @@
+% nix
+
+# Start nix dev container (mount host $PWD at /nixpkgs)
+podman run -dit --name nix -v "$PWD":/nixpkgs:rw -w /nixpkgs docker.io/nixos/nix:latest
+
+# Update package <pkg> in nixpkgs
+podman exec -it nix bash -c 'NIX_PATH=nixpkgs=/nixpkgs nix-shell maintainers/scripts/update.nix --argstr package <pkg>'
+
+# Build package <pkg> in nixpkgs (sandbox off)
+podman exec -it nix bash -c 'NIX_PATH=nixpkgs=/nixpkgs nix-build -A <pkg> --option sandbox false --no-out-link'

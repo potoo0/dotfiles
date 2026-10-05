@@ -1,0 +1,8 @@
+% docker, run
+
+# Run a long-lived idle container (for debugging)
+<engine> run -d --rm --name t1 --entrypoint tail <image> -f /dev/null
+
+; ------------------ variables ------------------
+$ engine: command -v podman >/dev/null 2>&1 && echo podman || echo docker
+$ image: <engine> images --format '{{.Repository}}:{{.Tag}}'
