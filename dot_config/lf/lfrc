@@ -14,6 +14,8 @@ set timefmt    '2006-01-02 15:04:05' # 底部的时间格式
 set incsearch  true                  # 增量搜索, 即每次按下字符都搜索
 set ignorecase true
 
+set previewer ~/.config/lf/pv.sh
+
 cmd usage $du -h -d1 | less
 map <enter> shell
 
