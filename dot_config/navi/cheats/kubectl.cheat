@@ -1,0 +1,39 @@
+; ----------------------------------------------------------------------
+; deployment
+; ----------------------------------------------------------------------
+
+% kubectl, deployment
+
+# Restart deployment (reload ConfigMap)
+kubectl rollout restart deployment/<deployment>
+
+$ deployment: kubectl get deploy -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'
+
+; ----------------------------------------------------------------------
+; Pod
+; ----------------------------------------------------------------------
+
+% kubectl, pod
+
+# Get a Running pod from deployment
+echo <pod>
+
+# Follow pod logs (last 100 lines)
+kubectl logs <pod> --tail=100 -f
+
+# Exec into pod
+kubectl exec -it <pod> -- sh
+
+# Describe pod
+kubectl describe pod <pod>
+
+# Delete pod (recreate by deployment)
+kubectl delete pod <pod>
+
+# Port forward pod
+kubectl port-forward pod/<pod> <local_port>:<remote_port>
+
+$ deployment: kubectl get deploy -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'
+$ pod: selector=$(kubectl get deploy <deployment> -o go-template='{{range $k,$v := .spec.selector.matchLabels}}{{$k}}={{$v}},{{end}}') || exit 1; [ -n "$selector" ] && kubectl get pods -l "${selector%,}" --field-selector=status.phase=Running -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'
+$ local_port: echo 29101
+$ remote_port: echo 9001
