@@ -106,24 +106,29 @@ setopt promptsubst         # enable command substitution in prompt
 
 # b for bash. ref: https://github.com/zsh-users/zsh/blob/master/Functions/Zle/select-word-style
 autoload -U select-word-style && select-word-style b
-# treat '-' as part of a word so Ctrl-w deletes '--option' in one step
-zstyle ':zle:*' word-chars '-'
+# # treat '-' as part of a word so Ctrl-w deletes '--option' in one step
+# zstyle ':zle:*' word-chars '-'
 
 ########################## History Configuration ##########################
 HISTSIZE=10000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
 
-setopt extended_history     # history file with timestamp
+# Persist history with timestamps and append entries incrementally.
+setopt extended_history
 setopt append_history
 setopt inc_append_history
 unsetopt share_history inc_append_history_time
 
-setopt hist_ignore_space    # ignore the first character on the line is a space
+# Deduplicate in-memory history, persisted history, and history search.
 setopt hist_ignore_all_dups
 setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
+
+# Keep whitespace-prefixed commands in the current shell, but do not persist them.
+HISTORY_IGNORE='[[:space:]]*'
+unsetopt hist_ignore_space
 
 ########################## Directory Stack ##########################
 setopt auto_pushd           # make cd push the old directory onto the directory stack
