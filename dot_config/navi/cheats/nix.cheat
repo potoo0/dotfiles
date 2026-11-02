@@ -1,10 +1,16 @@
 % nix
 
-# Start nix dev container (mount host $PWD at /nixpkgs)
-podman run -dit --name nix -v "$PWD":/nixpkgs:rw -w /nixpkgs docker.io/nixos/nix:latest
+# Start nix dev container (persist /nix in nix-data; mount host $PWD at /nixpkgs)
+<engine> run -dit --name nix --privileged -v nix-data:/nix -v "$PWD":/nixpkgs:rw -w /nixpkgs docker.io/nixos/nix:latest
 
 # Update package <pkg> in nixpkgs
-podman exec -it nix bash -c 'NIX_PATH=nixpkgs=/nixpkgs nix-shell maintainers/scripts/update.nix --argstr package <pkg>'
+<engine> exec -it nix bash -c 'NIX_PATH=nixpkgs=/nixpkgs nix-shell maintainers/scripts/update.nix --argstr package <pkg>'
 
-# Build package <pkg> in nixpkgs (sandbox off)
-podman exec -it nix bash -c 'NIX_PATH=nixpkgs=/nixpkgs nix-build -A <pkg> --option sandbox false --no-out-link'
+# Build package <pkg> in nixpkgs (sandbox on)
+<engine> exec -it nix bash -c 'nix --extra-experimental-features nix-command build --file /nixpkgs <pkg> --option sandbox true --option sandbox-fallback false --no-link --print-out-paths'
+
+# Rebuild package <pkg> in nixpkgs and compare with existing outputs (sandbox on)
+<engine> exec -it nix bash -c 'nix --extra-experimental-features nix-command build --file /nixpkgs <pkg> --rebuild --option sandbox true --option sandbox-fallback false --no-link --print-out-paths'
+
+; ------------------ variables ------------------
+$ engine: command -v podman >/dev/null 2>&1 && echo podman || echo docker
