@@ -1,3 +1,5 @@
+.worktrees/
+
 .idea/
 *__gitignore__*
 
